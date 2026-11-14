@@ -1,0 +1,39 @@
+
+name: AI Email Assistant CI
+
+# Decide when GitHub should execute this workflow.
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+
+  pull_request:
+    branches:
+      - main
+
+# Give the workflow read-only access to repository contents.
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download our repository onto the runner.
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Java 25.
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      # Step 3: Build the application and execute tests.
+      - name: Build and verify
+        run: bash ./mvnw -B clean verify
